@@ -15,9 +15,8 @@ class Login():
 
     def generateId(self):
         botService = self.graph.evaluate("match (betabot:Bot) return (betabot.served)")
-        if botService:
+        if botService != None:
             botService+=1
-            self.graph.run("match (betabot:Bot) set betabot.served = $botService",botService=botService)
         else:
             dataToGet = {
             "name":"Betabot",
@@ -26,8 +25,7 @@ class Login():
         }
             botService = self.graph.evaluate("create (betabot:Bot {name:$name,id:$id,served:$served}) return (betabot.served)",**dataToGet)
         return botService
-        
-        
+
 
     def interrupt(self,userInput):
         print("\nBetabot> Sorry to interrupt you but, can I have your name please?\n")
@@ -97,13 +95,11 @@ class Login():
                 "episode":1,
             }
             self.graph.run("create (p:Person:User {name:$userName,id:$userId,sysName:$sysName,dateCreated:$dateCreated,status:$status})",**dataToGet)
-            self.graph.run("match (p),(betabot) where p.id = $userId and betabot.id = 0 "
+            self.graph.run(f"match (p),(betabot) where p.id = $userId and betabot.id = 0 "
                            " merge (betabot)-[:KNOWS]->(p)",userId=userId)
             epmId = self.graph.evaluate("create (epm:EpisodicMemory {name:$name,episode:$episode}) return id(epm)",**episodes)
             epi = self.graph.evaluate("match (p:User),(epm:EpisodicMemory) where p.id = $userId and id(epm) = $epmId "
                            " create (p)-[:hasEpisodes]->(epm) return (epm.episode) ",userId=userId,epmId=epmId)
-            print(epi)
-            print(type(epi))
             comb = [userName,userId,epi,"sp"]
             return comb
         else:

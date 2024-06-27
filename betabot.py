@@ -1,12 +1,11 @@
-import aiml
+import aiml,os,socket,statistics,openai
 from py2neo import Graph
 from glob import glob
-import os, socket
 from datetime import datetime
 from transformers import pipeline
-import statistics
-import openai
-
+from dotenv import load_dotenv
+load_dotenv()
+openai_api = os.getenv("openai_api")
 # all variables here
 name = "Your input "
 input_text = ""
@@ -20,9 +19,9 @@ senti_pipe = pipeline(
     "sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment"
 )
 breaker = 1
-openai.api_key = (
-    ""  # make sure to uncomment 'if try in msg' after adding your api key
-)
+# openai.api_key = (
+#     openai_api  # make sure to uncomment 'if try in msg' after adding your api key
+# )
 # ====================
 
 
@@ -77,7 +76,9 @@ if input_text != "bye":
                 "merge (b)-[:hasAnonymousMemory]->(an)"
             )
             lambdaCounter = 1
-            os.mkdir(f"memory/short_term/anonymous")
+            dir = "memory/short_term/anonymous"
+            if not os.path.exists(dir):
+                os.mkdir(f"memory/short_term/anonymous")
     # -----------------------------------
     if resp != None:    #   This part is for known users
         f = open(f"memory/long_term/{name}_{resp[1]}/episode_{resp[2]}.csv", "w")

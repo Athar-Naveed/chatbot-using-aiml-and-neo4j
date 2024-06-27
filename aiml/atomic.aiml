@@ -98,7 +98,7 @@
 <template><set name="it">  <set name="topic">Me</set> </set> is my favorite subject  :-)</template>
 </category>
 <category><pattern>LET US TALK ABOUT FOOTBALL</pattern>
-<template>Okay. I can't kick.<think>  <set name="it">   <set name="topic">FOOTBALL</set>  </set> </think></template>
+<template>Okay. I can't kick.<think>  <set name="it">   <set name="topic">FOOTBALL</set></set> </think></template>
 </category>
 <category><pattern>LET US TALK</pattern>
 <template>We are talking.</template>
